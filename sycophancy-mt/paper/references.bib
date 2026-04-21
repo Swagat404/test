@@ -1,0 +1,160 @@
+% References pulled from the project's deep-research literature survey
+% (Research Report on Sycophancy in LLM-Based Machine Translation Evaluation.pdf).
+% Three streams: MT LLM judges, sycophancy/persuasion, calibration/disagreement.
+
+% =====================================================================
+% Stream 1: MT-specific LLM judges and metrics shared tasks
+% =====================================================================
+
+@inproceedings{kocmi-federmann-2023-gemba,
+  title     = {Large Language Models Are State-of-the-Art Evaluators of Translation Quality},
+  author    = {Kocmi, Tom and Federmann, Christian},
+  booktitle = {Proceedings of the 24th Annual Conference of the European Association for Machine Translation},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2302.14520}
+}
+
+@inproceedings{kocmi-federmann-2023-gemba-mqm,
+  title     = {{GEMBA-MQM}: Detecting Translation Quality Error Spans with {GPT-4}},
+  author    = {Kocmi, Tom and Federmann, Christian},
+  booktitle = {Proceedings of the Eighth Conference on Machine Translation (WMT)},
+  year      = {2023}
+}
+
+@inproceedings{lu-eaprompt-2024,
+  title     = {Error Analysis Prompting Enables Human-Like Translation Evaluation in Large Language Models},
+  author    = {Lu, Qingyu and Qiu, Baopu and Ding, Liang and Zhang, Kanjian and Kocmi, Tom and Tao, Dacheng},
+  booktitle = {Findings of the Association for Computational Linguistics: ACL 2024},
+  year      = {2024}
+}
+
+@inproceedings{agrawal-context-mqm-2024,
+  title     = {Context-Aware Machine Translation Evaluation with Large Language Models},
+  author    = {Agrawal, Sweta and others},
+  booktitle = {Proceedings of WMT},
+  year      = {2024}
+}
+
+@inproceedings{kim-rubric-mqm-2025,
+  title     = {{RUBRIC-MQM}: Auto-Generating Rubrics for Meta-Evaluating MT {LLM} Judges},
+  author    = {Kim, and others},
+  booktitle = {Proceedings of ACL},
+  year      = {2025}
+}
+
+@inproceedings{wmt2024metrics,
+  title     = {Findings of the {WMT24} Metrics Shared Task},
+  author    = {{WMT24 Organizers}},
+  booktitle = {Proceedings of the Ninth Conference on Machine Translation (WMT)},
+  year      = {2024}
+}
+
+@inproceedings{wmt2025metrics,
+  title     = {Findings of the {WMT25} Metrics Shared Task},
+  author    = {{WMT25 Organizers}},
+  booktitle = {Proceedings of the Tenth Conference on Machine Translation (WMT)},
+  year      = {2025}
+}
+
+@inproceedings{wmt-qe-2023,
+  title     = {Findings of the {WMT 2023} Shared Task on Quality Estimation},
+  author    = {{WMT QE 2023 Organizers}},
+  booktitle = {Proceedings of the Eighth Conference on Machine Translation (WMT)},
+  year      = {2023}
+}
+
+@inproceedings{wmt-qe-2024,
+  title     = {Findings of the {WMT 2024} Shared Task on Quality Estimation},
+  author    = {{WMT QE 2024 Organizers}},
+  booktitle = {Proceedings of the Ninth Conference on Machine Translation (WMT)},
+  year      = {2024}
+}
+
+% =====================================================================
+% Stream 2: General LLM-as-a-judge methodology and bias
+% =====================================================================
+
+@inproceedings{liu-geval-2023,
+  title     = {{G-Eval}: {NLG} Evaluation Using {GPT-4} with Better Human Alignment},
+  author    = {Liu, Yang and Iter, Dan and Xu, Yichong and Wang, Shuohang and Xu, Ruochen and Zhu, Chenguang},
+  booktitle = {Proceedings of EMNLP},
+  year      = {2023},
+  url       = {https://aclanthology.org/2023.emnlp-main.153/}
+}
+
+@article{judgebench-2024,
+  title   = {{JudgeBench}: A Benchmark for Evaluating {LLM-as-Judge} Systems},
+  author  = {Tan, Sijun and others},
+  journal = {arXiv preprint arXiv:2410.12784},
+  year    = {2024}
+}
+
+@inproceedings{offsetbias-2024,
+  title     = {{OffsetBias}: Leveraging Debiased Data for Tuning Evaluators},
+  author    = {Park, Junsoo and others},
+  booktitle = {Proceedings of EMNLP},
+  year      = {2024}
+}
+
+% =====================================================================
+% Stream 3: Sycophancy, persuasion, evaluator rebuttal
+% =====================================================================
+
+@article{sharma-sycophancy-2023,
+  title   = {Towards Understanding Sycophancy in Language Models},
+  author  = {Sharma, Mrinank and Tong, Meg and Korbak, Tomasz and Duvenaud, David and Askell, Amanda and Bowman, Samuel R. and Cheng, Newton and others},
+  journal = {arXiv preprint arXiv:2310.13548},
+  year    = {2023},
+  url     = {https://arxiv.org/abs/2310.13548}
+}
+
+@article{syceval-2025,
+  title   = {{SycEval}: Evaluating {LLM} Sycophancy},
+  author  = {Fanous, Aaron and others},
+  journal = {arXiv preprint arXiv:2502.08177},
+  year    = {2025},
+  note    = {Introduces the progressive vs.\ regressive sycophancy distinction adopted in this work},
+  url     = {https://arxiv.org/html/2502.08177v4}
+}
+
+@inproceedings{kim-khashabi-2025,
+  title     = {Challenging the Evaluator: {LLM} Sycophancy Under User Rebuttal},
+  author    = {Kim, and Khashabi, Daniel},
+  booktitle = {Findings of EMNLP},
+  year      = {2025},
+  url       = {https://aclanthology.org/2025.findings-emnlp.1222.pdf}
+}
+
+@inproceedings{hwang-grader-2025,
+  title     = {Can You Trick the Grader? Adversarial Persuasion of {LLM} Judges},
+  author    = {Hwang, and others},
+  booktitle = {Proceedings of EMNLP},
+  year      = {2025},
+  url       = {https://aclanthology.org/2025.emnlp-main.569.pdf}
+}
+
+@article{multiturn-sycophancy-2024,
+  title   = {Measuring Sycophancy of Language Models in Multi-turn Dialogues},
+  author  = {Park, and others},
+  journal = {arXiv preprint},
+  year    = {2024}
+}
+
+% =====================================================================
+% Stream 4: Calibration, annotation disagreement, ambiguity-aware NLP
+% =====================================================================
+
+@article{kadavath-2022-know,
+  title   = {Language Models (Mostly) Know What They Know},
+  author  = {Kadavath, Saurav and Conerly, Tom and Askell, Amanda and Henighan, Tom and Drain, Dawn and others},
+  journal = {arXiv preprint arXiv:2207.05221},
+  year    = {2022},
+  url     = {https://arxiv.org/abs/2207.05221}
+}
+
+@inproceedings{disagreement-overconfidence-2025,
+  title     = {{LLMs} Are Overconfident on Cases Where Annotators Disagree},
+  author    = {{TBD --- annotation-disagreement / offensive-language paper from research report}},
+  booktitle = {TBD},
+  year      = {2025}
+}

@@ -1,0 +1,229 @@
+% Pre-experiments draft. Sections written: Abstract, Intro, Related Work, Data,
+% Experimental Design, Planned Analysis. Results/Discussion/Conclusion are stubs
+% to be filled in once the runs complete. Uses the official ACL submission
+% template (review mode = with line ruler).
+
+\documentclass[11pt]{article}
+\usepackage[preprint]{acl}
+
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+
+\title{Does Translation Ambiguity Modulate Sycophancy in
+       LLM-Based Machine Translation Evaluation?}
+
+\author{Author One \\ McGill University \\ \texttt{author1@mail.mcgill.ca}
+        \And
+        Author Two \\ McGill University \\ \texttt{author2@mail.mcgill.ca}
+        \And
+        Author Three \\ McGill University \\ \texttt{author3@mail.mcgill.ca}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+LLMs are now widely used to judge machine translation (MT) quality, but
+recent work outside MT shows these judges can be talked into revising their
+scores when a user pushes back. We ask whether this effect depends on how
+ambiguous the translation is in the first place: do LLM judges cave more on
+segments where human raters themselves disagreed? We measure ambiguity per
+segment as the standard deviation of standardised human direct-assessment
+(DA) scores from WMT Quality Estimation, and draw a 594-segment sample
+balanced over a $3 \times 3$ gold-quality $\times$ ambiguity grid so the two
+axes are decorrelated. The challenge protocol uses two controls. The first
+isolates random reconsideration noise; the second isolates whether the
+critique itself was informative. What is left is attributable to social
+pressure. Results to follow.
+\end{abstract}
+
+\section{Introduction}
+
+LLMs are increasingly used to judge MT
+quality~\cite{kocmi-federmann-2023-gemba,wmt2025metrics}. A separate line
+of work has shown that LLM evaluators can be \emph{sycophantic} under user
+rebuttal: they revise their judgements toward whatever the user suggests,
+even when the user is
+wrong~\cite{sharma-sycophancy-2023,kim-khashabi-2025,hwang-grader-2025}.
+Whether this matters for MT, and when, is open.
+
+We hypothesise that sycophancy is stronger on translations where human
+raters themselves disagreed about quality. When a translation is
+borderline, the judge has less internal conviction to defend, and is
+easier to push around. Concretely we test three claims:
+\textbf{H1} LLM MT judges yield to user pressure: when challenged, they
+revise their scores in the direction the user suggests, even when the
+user is wrong;
+\textbf{H2} (central) the size of that revision grows with per-segment
+human disagreement;
+\textbf{H3} rubric prompts that require explicit reasoning resist
+sycophancy better than scalar score-only prompts.
+
+We test this jointly: LLM-judge sycophancy under user challenge against
+per-segment human-rater disagreement. We use the English\,$\to$\,Hindi
+split of WMT QE~2023, because the test requires per-rater scalar DA
+scores rather than aggregated means or categorical error spans
+(Section~\ref{sec:dataset}).
+
+\section{Related Work}
+
+\paragraph{LLM judges for MT.}
+GEMBA~\cite{kocmi-federmann-2023-gemba} showed that zero-shot prompted LLM
+judges are competitive with learned MT metrics;
+GEMBA-MQM~\cite{kocmi-federmann-2023-gemba-mqm} extends this to MQM-style
+error spans, and RUBRIC-MQM~\cite{kim-rubric-mqm-2025} meta-evaluates MT
+LLM judges. The WMT25 metrics shared task~\cite{wmt2025metrics} reports
+that strong LLM judges top system-level rankings, while segment-level
+prediction is harder. None of this work probes what happens when a user
+pushes back.
+
+\paragraph{Sycophancy and persuasion.}
+Sharma et al.~\cite{sharma-sycophancy-2023} framed the basic phenomenon:
+LLMs systematically agree with stated user beliefs.
+SycEval~\cite{syceval-2025} introduced the \emph{progressive} vs.\
+\emph{regressive} distinction we adopt in Section~\ref{sec:outcomes}
+(regressive: the revision moves further from gold; progressive: closer).
+Kim and Khashabi~\cite{kim-khashabi-2025} are the closest conceptual
+neighbour: they show LLM evaluators flip more readily under follow-up
+rebuttal than under neutral evaluation, especially for casually-worded
+challenges. Neither study is MT-specific, and neither conditions on
+human-rater disagreement.
+
+\paragraph{Gap.}
+The streams above have been studied separately. The joint test ---
+\emph{does MT judge sycophancy concentrate on the segments humans found
+hardest to score?} --- is, to our knowledge, untested.
+
+\section{Data}
+
+\subsection{Dataset requirement and choice}
+\label{sec:dataset}
+
+We need \emph{per-segment, per-rater scalar quality scores}, since
+ambiguity is the SD across raters for a single segment. This rules out
+two common MT annotation regimes. MQM
+annotations~\cite{kocmi-federmann-2023-gemba-mqm} record categorical
+error spans, so inter-rater dispersion has no natural continuous
+definition. And several recent DA releases ship only aggregated
+$z$-means after pooling raters, which discards the dispersion we need.
+
+WMT QE~2023~\cite{wmt-qe-2023} fits cleanly: it releases sentence-level
+DA from four expert raters per segment, with per-rater $z$-standardisation
+applied by WMT before release. We use its English\,$\to$\,Hindi train and
+development splits (8{,}000 segments combined).
+
+\subsection{Gold and ambiguity}
+
+For each segment $i$ with raters $r = 1, \ldots, k$ ($k=4$), let $z_{i,r}$
+be the released $z$-standardised DA score. We define
+\begin{align*}
+g_i &= \frac{1}{k}\sum_{r=1}^{k} z_{i,r}                & \text{(gold)} \\
+A_i &= \mathrm{SD}\bigl(z_{i,1}, \ldots, z_{i,k}\bigr)  & \text{(ambiguity)}.
+\end{align*}
+$g_i$ is our best estimate of segment quality and $A_i$ measures how much
+the four raters disagreed.
+
+\subsection{Cross-stratified sample}
+\label{sec:sample}
+
+The full en$\to$hi data has $\mathrm{Spearman}(g, A) = -0.31$:
+lower-quality translations are systematically more disagreed upon.
+Stratifying only on $A$ would bias the high-ambiguity tertile toward bad
+translations and let a reviewer attribute any H2 effect to translation
+badness rather than ambiguity. We therefore cross-stratify on a
+$3 \times 3$ grid of (gold-tertile $\times$ ambiguity-tertile), drawing
+66 segments from each of the 9 cells ($n=594$, seed 42), with cell
+boundaries set by terciles of $g$ and $A$ in the full table. Residual
+$\mathrm{Spearman}(g, A)$ in the sample is $-0.13$.
+
+\section{Experimental Design}
+
+\subsection{Judges and prompts}
+
+We use two frontier LLM judges from independent providers, with temperature
+fixed at 0 and exact snapshot IDs pinned in the released code. Each judge
+is queried under two prompt families. The \textbf{scalar} prompt asks only
+for a 0--100 score (WMT25 template). The \textbf{rubric} prompt asks the
+model to first identify any major errors with a brief reason, then emit a
+JSON object \texttt{\{score\_0\_100, major\_issue, brief\_reason\}}. The
+contrast tests H3.
+
+\subsection{Conditions: one challenge and two controls}
+
+For every (segment, judge, prompt-family) trio we run four queries, using
+a single \textbf{casual-doubt} challenge style.
+
+\begin{enumerate}
+\item \textbf{Baseline.} The judge sees source and translation, emits $s_0$.
+\item \textbf{Challenge (same chat).} The user follows up with a casual
+objection in the \emph{gold-inconsistent} direction: if humans agreed the
+translation is good, the user pushes for a lower score, and vice versa.
+The judge emits $s_c$. Because we know the gold direction, any compliance
+is sycophantic rather than corrective.
+\item \textbf{Neutral control (same chat).} Same context, but the follow-up
+is a neutral ``Could you take another look at your score?'' with no opinion.
+Emits $s_{\mathrm{neut}}$, controlling for second-look drift, in the spirit
+of the neutral-reprompt baselines used in prior sycophancy
+work~\cite{sharma-sycophancy-2023}.
+\item \textbf{Simultaneous control (fresh chat).} A new conversation in
+which the objection appears alongside source and translation from the start,
+with no prior baseline to defend. Emits $s_{\mathrm{sim}}$, controlling for
+the critique's informational content independent of social pressure. This
+is the same mechanism as the LLM-as-Judge contrast
+in~\citet{kim-khashabi-2025}, ported here from MCQ answers to MT scores.
+\end{enumerate}
+
+\subsection{Outcome measures}
+\label{sec:outcomes}
+
+For challenged score $s_c$, baseline $s_0$, and gold $g$, we record:
+\begin{itemize}
+\item \emph{Signed shift:} $s_c - s_0$.
+\item \emph{Directional compliance:} $|s_c - s_0| \geq 5$ in the
+user-requested direction.
+\item \emph{Regressive sycophancy:} compliance such that
+$|s_c - g| > |s_0 - g|$.
+\item \emph{Progressive correction:} compliance such that
+$|s_c - g| < |s_0 - g|$.
+\end{itemize}
+The progressive/regressive split is adapted from SycEval~\cite{syceval-2025},
+which introduced it for direct answers.
+
+\section{Planned Analysis}
+
+\begin{description}
+\item[H1 (sycophancy exists).] Paired Wilcoxon on
+$|s_c - g| - |s_0 - g|$ per (judge $\times$ prompt), with the neutral
+control as the within-segment null.
+\item[H2 (ambiguity moderates).] Spearman $\rho$ between $A$ and
+$|s_c - s_0|$, with bootstrap 95\% CI ($n=10{,}000$).
+\item[H3 (rubric resists).] Paired Wilcoxon on directional-compliance
+rate, scalar vs.\ rubric.
+\end{description}
+
+As a robustness check we fit a mixed-effects regression
+\[
+\mathrm{shift} \sim A_z + g_z + \mathrm{prompt} + \mathrm{judge}
+                + (1 \mid \mathrm{segment}),
+\]
+with $g_z$ as a covariate to control for the residual quality--ambiguity
+correlation (Section~\ref{sec:sample}).
+
+\section{Results}
+
+\section{Discussion}
+
+\section{Conclusion}
+
+\section*{Statement of Contributions}
+
+\bibliographystyle{acl_natbib}
+\bibliography{references}
+
+\end{document}

@@ -1,0 +1,14 @@
+sample_path: data/sample.parquet
+results_path: results/results.jsonl
+checkpoint_every: 50
+
+judges:
+  - openai
+  - anthropic
+
+prompt_families:
+  - scalar
+  - rubric
+
+challenges:
+  - casual
