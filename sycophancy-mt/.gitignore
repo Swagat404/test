@@ -9,6 +9,8 @@ results/*.jsonl
 !results/.gitkeep
 data/*.parquet
 !data/.gitkeep
+!data/segments.parquet
+!data/sample.parquet
 figs/*.png
 figs/*.pdf
 paper/main.aux
